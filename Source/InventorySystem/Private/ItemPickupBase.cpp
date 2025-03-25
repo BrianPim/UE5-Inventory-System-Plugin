@@ -88,15 +88,14 @@ void AItemPickupBase::OnOverlapStart(UPrimitiveComponent* OverlappedComponent, A
 			
 			if (QuantityRemaining <= 0)
 			{
-				ConditionalBeginDestroy();
+				K2_DestroyActor();
 			}
 			else
 			{
 				ItemMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
 				Quantity = QuantityRemaining;
+				InventoryToAddTo = nullptr;
 			}
-
-			InventoryToAddTo = nullptr;
 		}
 		else if (OverlappedComponent == SphereComponent && !InventoryToAddTo)
 		{

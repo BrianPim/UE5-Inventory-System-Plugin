@@ -12,6 +12,7 @@ class UInventoryItem;
 struct FInventoryItemData;
 
 //Delegate Declarations
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FInventoryUpdated);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInventoryItemAtIndexUpdated,
 												int32, Index);
 
@@ -59,13 +60,17 @@ public:
 
 	//Delegates
 	UPROPERTY(BlueprintAssignable, Category="Inventory System|Player Inventory")
+	FInventoryUpdated OnInventoryInitialized;
+	
+	UPROPERTY(BlueprintAssignable, Category="Inventory System|Player Inventory")
 	FInventoryItemAtIndexUpdated OnInventoryItemAtIndexUpdated;
 	
 protected:
 	virtual void BeginPlay() override;
 
 private:
-	static constexpr int BaseInventoryArraySize = 36;
+	static constexpr int BaseInventoryArraySize = 40;
+	static constexpr int BaseHorizontalSize = 10;
 	static constexpr int BaseSelectedIndex = 0;
 
 	static constexpr float BaseDropItemImpulseModifier = 3.0f;
@@ -79,6 +84,9 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System|Player Inventory", meta= (AllowPrivateAccess = true))
 	int InventoryArraySize = BaseInventoryArraySize;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System|Player Inventory", meta= (AllowPrivateAccess = true))
+	int InventoryHorizontalSize = BaseHorizontalSize;
 
 	//The distance from the player where the newly dropped item is spawned.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System|Player Inventory", meta= (AllowPrivateAccess = true))

@@ -5,6 +5,7 @@
 #include "InventoryItem.h"
 #include "InventoryItemData.h"
 #include "ItemPickupBase.h"
+#include "LogInventorySystem.h"
 
 UPlayerInventoryBase::UPlayerInventoryBase()
 {
@@ -16,6 +17,10 @@ UPlayerInventoryBase::UPlayerInventoryBase()
 void UPlayerInventoryBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	InventoryHorizontalSize = FMath::Clamp(InventoryHorizontalSize, 0, InventoryArraySize);
+
+	OnInventoryInitialized.Broadcast();
 }
 
 void UPlayerInventoryBase::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -28,7 +33,7 @@ int UPlayerInventoryBase::TryAddItem(FInventoryItemData ItemToAdd, int Quantity)
 {
 	if (Quantity <= 0)
 	{
-		UE_LOG(LogTemp, Warning,
+		UE_LOG(LogInventorySystem, Warning,
 				   TEXT("Couldn't add more %s because Quantity %i is not a valid input!"),
 				   *ItemToAdd.DisplayName.ToString(), Quantity);
 
@@ -91,7 +96,7 @@ int UPlayerInventoryBase::TryAddItem(FInventoryItemData ItemToAdd, int Quantity)
 		}
 	}
 
-	UE_LOG(LogTemp, Warning,
+	UE_LOG(LogInventorySystem, Warning,
 				   TEXT("Couldn't add more %s because the Player's inventory is full! Added %i out of %i requested."),
 				   *ItemToAdd.DisplayName.ToString(), Quantity - QuantityRemaining, Quantity);
 
@@ -102,7 +107,7 @@ int UPlayerInventoryBase::TryRemoveItem(FInventoryItemData ItemToRemove, int Qua
 {
 	if (Quantity <= 0)
 	{
-		UE_LOG(LogTemp, Warning,
+		UE_LOG(LogInventorySystem, Warning,
 				   TEXT("Couldn't add more %s because Quantity %i is not a valid input!"),
 				   *ItemToRemove.DisplayName.ToString(), Quantity);
 
@@ -132,7 +137,7 @@ int UPlayerInventoryBase::TryRemoveItem(FInventoryItemData ItemToRemove, int Qua
 		}
 	}
 	
-	UE_LOG(LogTemp, Warning,
+	UE_LOG(LogInventorySystem, Warning,
 				   TEXT("Not enough %s in the Player's inventory to remove! Removed %i out of %i requested."),
 				   *ItemToRemove.DisplayName.ToString(), Quantity - QuantityRemaining, Quantity);
 
@@ -168,7 +173,7 @@ void UPlayerInventoryBase::DropItemAtIndexAtLocation(int Index, int Quantity, FV
 {
 	if (InventoryArray[Index] == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Unable to drop item at index %i because there's no item assigned there!"), Index)
+		UE_LOG(LogInventorySystem, Warning, TEXT("Unable to drop item at index %i because there's no item assigned there!"), Index)
 		return;
 	}
 	
@@ -191,7 +196,7 @@ void UPlayerInventoryBase::RemoveAtIndex(int Index, int Quantity)
 {
 	if (InventoryArray[Index] == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Unable to remove %i at index %i because there's no item assigned there!"), Quantity, Index)
+		UE_LOG(LogInventorySystem, Warning, TEXT("Unable to remove %i at index %i because there's no item assigned there!"), Quantity, Index)
 		return;
 	}
 	
@@ -211,7 +216,7 @@ void UPlayerInventoryBase::RemoveAllAtIndex(int Index)
 {
 	if (InventoryArray[Index] == nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Unable to remove all at index %i because there's no item assigned there!"), Index)
+		UE_LOG(LogInventorySystem, Warning, TEXT("Unable to remove all at index %i because there's no item assigned there!"), Index)
 		return;
 	}
 	

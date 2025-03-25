@@ -2,6 +2,8 @@
 
 #include "InventorySystem.h"
 
+#include "LogInventorySystem.h"
+
 #define LOCTEXT_NAMESPACE "FInventorySystemModule"
 
 void FInventorySystemModule::StartupModule()
@@ -18,3 +20,5 @@ void FInventorySystemModule::ShutdownModule()
 #undef LOCTEXT_NAMESPACE
 	
 IMPLEMENT_MODULE(FInventorySystemModule, InventorySystem)
+
+DEFINE_LOG_CATEGORY(LogInventorySystem);

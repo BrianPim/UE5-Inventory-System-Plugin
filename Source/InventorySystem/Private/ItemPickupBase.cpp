@@ -3,6 +3,7 @@
 #include "ItemPickupBase.h"
 #include "PlayerInventoryBase.h"
 #include "InventoryItemData.h"
+#include "LogInventorySystem.h"
 #include "Components/SphereComponent.h"
 
 // Sets default values
@@ -39,7 +40,7 @@ void AItemPickupBase::BeginPlay()
 
 	if (!ItemMesh->GetStaticMesh())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Item Mesh is NULL! Adding Mesh from Item Data."));
+		UE_LOG(LogInventorySystem, Warning, TEXT("Item Mesh is NULL! Adding Mesh from Item Data."));
 		ItemMesh->SetStaticMesh(ItemData.Mesh.Get());
 	}
 	
@@ -70,8 +71,7 @@ void AItemPickupBase::Tick(float DeltaTime)
 
 void AItemPickupBase::OnOverlapStart(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{		UE_LOG(LogTemp, Warning, TEXT("0"));
-
+{
 	if (!OtherActor) return;
 
 	//TODO In the future could potentially merge item pickup stacks if they're placed beside each other
@@ -105,9 +105,15 @@ void AItemPickupBase::OnOverlapStart(UPrimitiveComponent* OverlappedComponent, A
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Inventory not found!"));
+		UE_LOG(LogInventorySystem, Warning, TEXT("Inventory not found!"));
 	}
-	
+}
+
+void AItemPickupBase::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
+{
+	InventoryToAddTo = nullptr;
+	ItemMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
 }
 
 void AItemPickupBase::EnablePickUp()

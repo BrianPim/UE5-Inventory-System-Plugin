@@ -58,6 +58,12 @@ public:
 	UFUNCTION(BlueprintPure, Category="Inventory System|Player Inventory")
 	UInventoryItem* GetItemAtIndex(int Index);
 
+	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
+	void SelectNextHotbarItem();
+
+	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
+	void SelectPreviousHotbarItem();
+
 	//Delegates
 	UPROPERTY(BlueprintAssignable, Category="Inventory System|Player Inventory")
 	FInventoryUpdated OnInventoryInitialized;
@@ -69,8 +75,8 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	static constexpr int BaseInventoryArraySize = 40;
-	static constexpr int BaseHorizontalSize = 10;
+	static constexpr int BaseNumberOfRows = 4;
+	static constexpr int BaseRowSize = 10;
 	static constexpr int BaseSelectedIndex = 0;
 
 	static constexpr float BaseDropItemImpulseModifier = 3.0f;
@@ -83,10 +89,10 @@ private:
 	TArray<TObjectPtr<UInventoryItem>> InventoryArray;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System|Player Inventory", meta= (AllowPrivateAccess = true))
-	int InventoryArraySize = BaseInventoryArraySize;
+	int NumberOfRows = BaseNumberOfRows;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System|Player Inventory", meta= (AllowPrivateAccess = true))
-	int InventoryHorizontalSize = BaseHorizontalSize;
+	int InventoryRowSize = BaseRowSize;
 
 	//The distance from the player where the newly dropped item is spawned.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System|Player Inventory", meta= (AllowPrivateAccess = true))

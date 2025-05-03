@@ -1,6 +1,5 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "PlayerInventoryBase.h"
 #include "InventoryItem.h"
 #include "InventoryItemData.h"
@@ -11,15 +10,13 @@ UPlayerInventoryBase::UPlayerInventoryBase()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	InventoryArray.Init(nullptr, InventoryArraySize);
+	InventoryArray.Init(nullptr, NumberOfRows * InventoryRowSize);
 }
 
 void UPlayerInventoryBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	InventoryHorizontalSize = FMath::Clamp(InventoryHorizontalSize, 0, InventoryArraySize);
-
+	
 	OnInventoryInitialized.Broadcast();
 }
 
@@ -265,5 +262,39 @@ int UPlayerInventoryBase::GetTotalQuantityOfItem(FInventoryItemData Item)
 UInventoryItem* UPlayerInventoryBase::GetItemAtIndex(int Index)
 {
 	return InventoryArray[Index];
+}
+
+void UPlayerInventoryBase::SelectNextHotbarItem()
+{
+	int OldIndex = SelectedIndex;
+
+	if (OldIndex < InventoryRowSize - 1)
+	{
+		SelectedIndex++;
+	}
+	else
+	{
+		SelectedIndex = 0;
+	}
+
+	OnInventoryItemAtIndexUpdated.Broadcast(OldIndex);
+	OnInventoryItemAtIndexUpdated.Broadcast(SelectedIndex);
+}
+
+void UPlayerInventoryBase::SelectPreviousHotbarItem()
+{
+	int OldIndex = SelectedIndex;
+
+	if (OldIndex > 0)
+	{
+		SelectedIndex--;
+	}
+	else
+	{
+		SelectedIndex = InventoryRowSize - 1;
+	}
+
+	OnInventoryItemAtIndexUpdated.Broadcast(OldIndex);
+	OnInventoryItemAtIndexUpdated.Broadcast(SelectedIndex);
 }
 

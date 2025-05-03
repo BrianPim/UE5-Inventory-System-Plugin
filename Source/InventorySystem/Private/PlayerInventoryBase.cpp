@@ -58,7 +58,7 @@ int UPlayerInventoryBase::TryAddItem(FInventoryItemData ItemToAdd, int Quantity)
 				}
 				else
 				{
-					InventoryArray[i]->SetQuantity(QuantityRemaining);
+					InventoryArray[i]->SetQuantity(InventoryArray[i]->GetQuantity() + QuantityRemaining);
 					OnInventoryItemAtIndexUpdated.Broadcast(i);
 					return 0;
 				}
@@ -87,7 +87,6 @@ int UPlayerInventoryBase::TryAddItem(FInventoryItemData ItemToAdd, int Quantity)
 			else
 			{
 				InventoryArray[i]->SetQuantity(QuantityRemaining);
-
 				OnInventoryItemAtIndexUpdated.Broadcast(i);
 				return 0;
 			}

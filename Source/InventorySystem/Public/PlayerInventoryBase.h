@@ -9,6 +9,7 @@
 //Forward Declarations
 class AItemPickupBase;
 class UInventoryItem;
+class UInputAction;
 struct FInventoryItemData;
 
 //Delegate Declarations
@@ -63,9 +64,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
 	void SelectPreviousHotbarItem();
-
+	
 	UFUNCTION(BlueprintPure, Category="Inventory System|Player Inventory")
 	int GetSelectedIndex();
+
+	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
+	void SetSelectedIndex(int NewIndex);
 
 	//Delegates
 	UPROPERTY(BlueprintAssignable, Category="Inventory System|Player Inventory")
@@ -105,6 +109,10 @@ private:
 	float DropItemInitialDistance = BaseDropItemInitialDistance;
 	
 	int SelectedIndex = BaseSelectedIndex;
+
+	//For Hotbar: Input Actions for selecting an item index must be assigned here as well in order for the inventory to know how to handle them
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System|Player Inventory", meta= (AllowPrivateAccess = true))
+	TArray<UInputAction*> SelectIndexInputActionArray;
 	
 	GENERATED_BODY()
 };

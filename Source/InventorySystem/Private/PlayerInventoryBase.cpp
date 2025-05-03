@@ -11,6 +11,7 @@ UPlayerInventoryBase::UPlayerInventoryBase()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	InventoryArray.Init(nullptr, NumberOfRows * InventoryRowSize);
+	SelectIndexInputActionArray.Init(nullptr, InventoryRowSize);
 }
 
 void UPlayerInventoryBase::BeginPlay()
@@ -266,40 +267,34 @@ UInventoryItem* UPlayerInventoryBase::GetItemAtIndex(int Index)
 
 void UPlayerInventoryBase::SelectNextHotbarItem()
 {
-	int OldIndex = SelectedIndex;
-
-	if (OldIndex < InventoryRowSize - 1)
-	{
-		SelectedIndex++;
-	}
-	else
-	{
-		SelectedIndex = 0;
-	}
-
-	OnInventoryItemAtIndexUpdated.Broadcast(OldIndex);
-	OnInventoryItemAtIndexUpdated.Broadcast(SelectedIndex);
+	SetSelectedIndex(SelectedIndex + 1);
 }
 
 void UPlayerInventoryBase::SelectPreviousHotbarItem()
 {
-	int OldIndex = SelectedIndex;
-
-	if (OldIndex > 0)
-	{
-		SelectedIndex--;
-	}
-	else
-	{
-		SelectedIndex = InventoryRowSize - 1;
-	}
-
-	OnInventoryItemAtIndexUpdated.Broadcast(OldIndex);
-	OnInventoryItemAtIndexUpdated.Broadcast(SelectedIndex);
+	SetSelectedIndex(SelectedIndex - 1);
 }
 
 int UPlayerInventoryBase::GetSelectedIndex()
 {
 	return SelectedIndex;
+}
+
+void UPlayerInventoryBase::SetSelectedIndex(int NewIndex)
+{
+	int OldIndex = SelectedIndex;
+	SelectedIndex = NewIndex;
+
+	if (SelectedIndex >= InventoryRowSize - 1)
+	{
+		SelectedIndex = 0;
+	}
+	else if (SelectedIndex < 0)
+	{
+		SelectedIndex = InventoryRowSize - 1;
+	}
+	
+	OnInventoryItemAtIndexUpdated.Broadcast(OldIndex);
+	OnInventoryItemAtIndexUpdated.Broadcast(SelectedIndex);
 }
 

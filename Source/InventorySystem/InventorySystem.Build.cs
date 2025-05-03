@@ -26,7 +26,8 @@ public class InventorySystem : ModuleRules
 			new string[]
 			{
 				"Core",
-				"UMG"
+				"UMG", 
+				"EnhancedInput"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

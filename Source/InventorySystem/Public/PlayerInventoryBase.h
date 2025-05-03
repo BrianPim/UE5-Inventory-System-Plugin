@@ -64,6 +64,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
 	void SelectPreviousHotbarItem();
 
+	UFUNCTION(BlueprintPure, Category="Inventory System|Player Inventory")
+	int GetSelectedIndex();
+
 	//Delegates
 	UPROPERTY(BlueprintAssignable, Category="Inventory System|Player Inventory")
 	FInventoryUpdated OnInventoryInitialized;

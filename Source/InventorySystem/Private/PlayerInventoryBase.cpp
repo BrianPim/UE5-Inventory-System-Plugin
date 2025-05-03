@@ -298,3 +298,8 @@ void UPlayerInventoryBase::SelectPreviousHotbarItem()
 	OnInventoryItemAtIndexUpdated.Broadcast(SelectedIndex);
 }
 
+int UPlayerInventoryBase::GetSelectedIndex()
+{
+	return SelectedIndex;
+}
+

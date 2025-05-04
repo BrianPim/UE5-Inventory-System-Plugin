@@ -106,6 +106,32 @@ int UPlayerInventoryBase::TryAddItem(FInventoryItemData ItemToAdd, int Quantity)
 	return QuantityRemaining;
 }
 
+int UPlayerInventoryBase::TryAddToExistingItemAtIndex(int Index, int Quantity)
+{
+	int QuantityRemaining = Quantity;
+	
+	if (InventoryArray[Index] != nullptr)
+	{
+		int AbleToAdd = InventoryArray[Index]->GetItemData().MaxStackQuantity - InventoryArray[Index]->GetQuantity();
+			
+		if (AbleToAdd < QuantityRemaining)
+		{
+			QuantityRemaining -= AbleToAdd;
+
+			InventoryArray[Index]->SetQuantity(InventoryArray[Index]->GetItemData().MaxStackQuantity);
+			OnInventoryItemAtIndexUpdated.Broadcast(Index);
+		}
+		else
+		{
+			InventoryArray[Index]->SetQuantity(InventoryArray[Index]->GetQuantity() + QuantityRemaining);
+			OnInventoryItemAtIndexUpdated.Broadcast(Index);
+			return 0;
+		}
+	}
+
+	return QuantityRemaining;
+}
+
 int UPlayerInventoryBase::TryRemoveItem(FInventoryItemData ItemToRemove, int Quantity)
 {
 	if (Quantity <= 0)
@@ -193,6 +219,33 @@ void UPlayerInventoryBase::DropItemAtIndexAtLocation(int Index, int Quantity, FV
 	DroppedItem->GetMesh()->AddImpulse(NormalizedDirection * DropItemImpulseModifier * 1000.0f);
 
 	RemoveAtIndex(Index, Quantity);
+}
+
+void UPlayerInventoryBase::DropHeldItem()
+{
+	TObjectPtr<AActor> Owner =  GetOwner();
+	FVector Location = Owner->GetActorLocation();
+	FVector NormalizedForwardVector = Owner->GetActorForwardVector().GetSafeNormal();
+	
+	FVector NewLocation = Location + NormalizedForwardVector * DropItemInitialDistance;
+
+	if (HeldItem == nullptr)
+	{
+		UE_LOG(LogInventorySystem, Warning, TEXT("Unable to drop held item because there's no held item assigned!"))
+		return;
+	}
+	
+	FActorSpawnParameters DroppedItemSpawnParams;
+	DroppedItemSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+	FTransform SpawnTransform = FTransform(FRotator::ZeroRotator, NewLocation);
+	
+	TObjectPtr<AItemPickupBase> DroppedItem = GetWorld()->SpawnActor<AItemPickupBase>(HeldItem->GetItemData().ItemPickup, SpawnTransform, DroppedItemSpawnParams);
+	DroppedItem->InstantiateItemData(HeldItem->GetItemData());
+	DroppedItem->SetQuantity(HeldItem->GetQuantity());
+
+	FVector NormalizedDirection = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	DroppedItem->GetMesh()->AddImpulse(NormalizedDirection * DropItemImpulseModifier * 1000.0f);
 }
 
 void UPlayerInventoryBase::RemoveAtIndex(int Index, int Quantity)
@@ -301,4 +354,15 @@ void UPlayerInventoryBase::SetHotbarSelectedIndex(int NewIndex)
 	
 	OnInventoryItemAtIndexUpdated.Broadcast(OldIndex);
 	OnInventoryItemAtIndexUpdated.Broadcast(HotbarSelectedIndex);
+}
+
+UInventoryItem* UPlayerInventoryBase::GetHeldItem()
+{
+	return HeldItem;
+}
+
+void UPlayerInventoryBase::SetHeldItem(UInventoryItem* NewHeldItem)
+{
+	TObjectPtr<UInventoryItem> OldHeldItem = HeldItem;
+	HeldItem = NewHeldItem;
 }

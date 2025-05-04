@@ -18,8 +18,9 @@ AItemPickupBase::AItemPickupBase()
 	ItemMesh->SetCollisionProfileName(FName("OverlapPawnOnly"));
 	ItemMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	ItemMesh->SetSimulatePhysics(true);
+	ItemMesh->SetStaticMesh(ItemData.Mesh.Get());
 	RootComponent = ItemMesh;
-
+	
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Component"));
 	SphereComponent->SetCollisionProfileName(FName("OverlapAllDynamic"));
 	SphereComponent->SetSphereRadius(150.0f);

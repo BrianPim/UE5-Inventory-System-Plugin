@@ -34,6 +34,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
 	int TryAddItem(FInventoryItemData ItemToAdd, int Quantity);
+
+	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
+	int TryAddToExistingItemAtIndex(int Index, int Quantity);
 	
 	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
 	int TryRemoveItem(FInventoryItemData ItemToRemove, int Quantity);
@@ -46,6 +49,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
 	void DropItemAtIndexAtLocation(int Index, int Quantity, FVector Location);
+
+	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
+	void DropHeldItem();
 
 	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
 	void RemoveAtIndex(int Index, int Quantity);
@@ -76,6 +82,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
 	void SetHotbarSelectedIndex(int NewIndex);
+
+	UFUNCTION(BlueprintPure, Category="Inventory System|Player Inventory")
+	UInventoryItem* GetHeldItem();
+
+	UFUNCTION(BlueprintCallable, Category="Inventory System|Player Inventory")
+	void SetHeldItem(UInventoryItem* NewHeldItem);
 
 	//Delegates
 	UPROPERTY(BlueprintAssignable, Category="Inventory System|Player Inventory")
@@ -118,6 +130,8 @@ private:
 	float DropItemInitialDistance = BaseDropItemInitialDistance;
 	
 	int HotbarSelectedIndex = BaseHotbarSelectedIndex;
+
+	TObjectPtr<UInventoryItem> HeldItem;
 
 	//For Hotbar: Input Actions for selecting an item index must be assigned here as well in order for the inventory to know how to handle them
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System", meta= (AllowPrivateAccess = true))

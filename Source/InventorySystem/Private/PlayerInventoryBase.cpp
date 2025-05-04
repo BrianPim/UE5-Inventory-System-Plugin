@@ -11,7 +11,7 @@ UPlayerInventoryBase::UPlayerInventoryBase()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	InventoryArray.Init(nullptr, NumberOfRows * InventoryRowSize);
-	SelectIndexInputActionArray.Init(nullptr, InventoryRowSize);
+	SelectIndexHotkeyArray.Init(nullptr, InventoryRowSize);
 }
 
 void UPlayerInventoryBase::BeginPlay()
@@ -25,6 +25,12 @@ void UPlayerInventoryBase::TickComponent(float DeltaTime, ELevelTick TickType,
                                      FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+}
+
+//Blank function that broadcasts a delegate, which should be accessed elsewhere to define item use functionality
+void UPlayerInventoryBase::UseItem(UInputAction* InputAction)
+{
+	OnInventoryItemUsed.Broadcast(InputAction, HotbarSelectedIndex);
 }
 
 int UPlayerInventoryBase::TryAddItem(FInventoryItemData ItemToAdd, int Quantity)
@@ -266,34 +272,33 @@ UInventoryItem* UPlayerInventoryBase::GetItemAtIndex(int Index)
 
 void UPlayerInventoryBase::SelectNextHotbarItem()
 {
-	SetSelectedIndex(SelectedIndex + 1);
+	SetHotbarSelectedIndex(HotbarSelectedIndex + 1);
 }
 
 void UPlayerInventoryBase::SelectPreviousHotbarItem()
 {
-	SetSelectedIndex(SelectedIndex - 1);
+	SetHotbarSelectedIndex(HotbarSelectedIndex - 1);
 }
 
-int UPlayerInventoryBase::GetSelectedIndex()
+int UPlayerInventoryBase::GetHotbarSelectedIndex()
 {
-	return SelectedIndex;
+	return HotbarSelectedIndex;
 }
 
-void UPlayerInventoryBase::SetSelectedIndex(int NewIndex)
+void UPlayerInventoryBase::SetHotbarSelectedIndex(int NewIndex)
 {
-	int OldIndex = SelectedIndex;
-	SelectedIndex = NewIndex;
+	int OldIndex = HotbarSelectedIndex;
+	HotbarSelectedIndex = NewIndex;
 
-	if (SelectedIndex >= InventoryRowSize - 1)
+	if (HotbarSelectedIndex >= InventoryRowSize - 1)
 	{
-		SelectedIndex = 0;
+		HotbarSelectedIndex = 0;
 	}
-	else if (SelectedIndex < 0)
+	else if (HotbarSelectedIndex < 0)
 	{
-		SelectedIndex = InventoryRowSize - 1;
+		HotbarSelectedIndex = InventoryRowSize - 1;
 	}
 	
 	OnInventoryItemAtIndexUpdated.Broadcast(OldIndex);
-	OnInventoryItemAtIndexUpdated.Broadcast(SelectedIndex);
+	OnInventoryItemAtIndexUpdated.Broadcast(HotbarSelectedIndex);
 }
-

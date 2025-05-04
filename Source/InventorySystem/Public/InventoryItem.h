@@ -7,6 +7,8 @@
 #include "UObject/Object.h"
 #include "InventoryItem.generated.h"
 
+//Delegate Declarations
+
 UCLASS()
 class INVENTORYSYSTEM_API UInventoryItem : public UObject
 {

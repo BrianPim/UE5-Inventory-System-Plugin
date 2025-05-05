@@ -11,56 +11,55 @@ The Inventory System Plugin has all of the core systems expected in a modern ite
 Extends **UActorComponent**. The core class of the Inventory System. Items are held in an array of **UInventoryItem** objects. The included utility functions allow for efficient manipulation of the inventory items.
 
 Functions (**public**)
-  - **void** UseItem(UInputAction* InputAction)
-  - **int** GetTotalQuantityOfItem(FInventoryItemData Item)
-  - **UInventoryItem*** GetItemAtIndex(int Index)
-  - **void** SwitchItemsAtIndices(int FirstIndex, int SecondIndex)
-  
-  - **int** TryAddItem(FInventoryItemData ItemToAdd, int Quantity)
-    - Returns remainder unable to be added.
-  - **int** TryAddToExistingItemAtIndex(int Index, int Quantity)
-    - Returns remainder unable to be added.
-  - **int** TryRemoveItem(FInventoryItemData ItemToRemove, int Quantity);
-    - Returns remainder unable to be removed.
-  - **void** RemoveAtIndex(int Index, int Quantity)
-  - **void** RemoveAllAtIndex(int Index)
-  - **void** RemoveAllOfItem(FInventoryItemData ItemToRemove)
-  - **bool** IsValidPickupTarget(FInventoryItemData Item)
-  - **void** DropItemAtIndex(int Index, int Quantity)
-  - **void** DropItemAtIndexAtLocation(int Index, int Quantity, FVector Location)
-  - **void** DropHeldItem();
-    - Currently un-used.
-  - **void** SelectNextHotbarItem()
-  - **void** SelectPreviousHotbarItem()
-  - **int** GetHotbarSelectedIndex()
-  - **void** SetHotbarSelectedIndex(int NewIndex)
-  - **UInventoryItem*** GetHeldItem()
-    - Currently un-used.
-  - **void** SetHeldItem(UInventoryItem* NewHeldItem)
-    - Currently un-used.
+- **void** UseItem(UInputAction* InputAction)
+- **int** GetTotalQuantityOfItem(FInventoryItemData Item)
+- **UInventoryItem*** GetItemAtIndex(int Index)
+- **void** SwitchItemsAtIndices(int FirstIndex, int SecondIndex) 
+- **int** TryAddItem(FInventoryItemData ItemToAdd, int Quantity)
+  - Returns remainder unable to be added.
+- **int** TryAddToExistingItemAtIndex(int Index, int Quantity)
+  - Returns remainder unable to be added.
+- **int** TryRemoveItem(FInventoryItemData ItemToRemove, int Quantity);
+  - Returns remainder unable to be removed.
+- **void** RemoveAtIndex(int Index, int Quantity)
+- **void** RemoveAllAtIndex(int Index)
+- **void** RemoveAllOfItem(FInventoryItemData ItemToRemove)
+- **bool** IsValidPickupTarget(FInventoryItemData Item)
+- **void** DropItemAtIndex(int Index, int Quantity)
+- **void** DropItemAtIndexAtLocation(int Index, int Quantity, FVector Location)
+- **void** DropHeldItem();
+  - Currently un-used.
+- **void** SelectNextHotbarItem()
+- **void** SelectPreviousHotbarItem()
+- **int** GetHotbarSelectedIndex()
+- **void** SetHotbarSelectedIndex(int NewIndex)
+- **UInventoryItem*** GetHeldItem()
+  - Currently un-used.
+- **void** SetHeldItem(UInventoryItem* NewHeldItem)
+  - Currently un-used.
     
 Delegates (**public**)
-  - **FInventoryUpdated** OnInventoryInitialized
-  - **FInventoryItemAtIndexUpdated** OnInventoryItemAtIndexUpdated
-  - **FInventoryItemUsed** OnInventoryItemUsed
+- **FInventoryUpdated** OnInventoryInitialized
+- **FInventoryItemAtIndexUpdated** OnInventoryItemAtIndexUpdated
+- **FInventoryItemUsed** OnInventoryItemUsed
     
 Variables (**private**)
-  - **TObjectPtr<UDataTable>** InventoryDataTable
-    - A reference to a **UDataTable** containing all of the **FInventoryItemData** entries should be added here
-  - **TArray<TObjectPtr<UInventoryItem>>** InventoryArray
-  - **int** NumberOfRows
-    - Modifiable from the Details panel.
-  - **int** InventoryRowSize
-    - Modifiable from the Details panel.
-  - **float** DropItemImpulseModifier
-     - The impulse/force added to the newly dropped item after being spawned. Modifiable from the Details panel.
-  - **float** DropItemInitialDistance
-     - The distance from the player where the newly dropped item is initially spawned. Modifiable from the Details panel.
-  - **int** HotbarSelectedIndex
-  - **TObjectPtr<UInventoryItem>** HeldItem
-    - Currently un-used.
-  - **TArray<UInputAction*>*** SelectIndexHotkeyArray
-    - For Hotbar: Input Actions for selecting an item index must be assigned here as well in order for the inventory to know how to handle them. Modifiable from the Details panel.
+- **TObjectPtr<UDataTable>** InventoryDataTable
+  - A reference to a **UDataTable** containing all of the **FInventoryItemData** entries should be added here
+- **TArray<TObjectPtr<UInventoryItem>>** InventoryArray
+- **int** NumberOfRows
+  - Modifiable from the Details panel.
+- **int** InventoryRowSize
+  - Modifiable from the Details panel.
+- **float** DropItemImpulseModifier
+   - The impulse/force added to the newly dropped item after being spawned. Modifiable from the Details panel.
+- **float** DropItemInitialDistance
+   - The distance from the player where the newly dropped item is initially spawned. Modifiable from the Details panel.
+- **int** HotbarSelectedIndex
+- **TObjectPtr<UInventoryItem>** HeldItem
+  - Currently un-used.
+- **TArray<UInputAction*>*** SelectIndexHotkeyArray
+  - For Hotbar: Input Actions for selecting an item index must be assigned here as well in order for the inventory to know how to handle them. Modifiable from the Details panel.
   
 ### UInventoryItem
 The array of items in the **UPlayerInventoryBase** class is populated by **UInventoryItem** objects. The class contains the relevant item information in the form of a **FInventoryItemData** struct object, as well as an **int** to track the Quantity of the item held in that inventory entry.

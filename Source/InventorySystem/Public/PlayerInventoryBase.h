@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿//Copyright (c) 2025 Brian Pimentel
 
 #pragma once
 
@@ -109,7 +109,8 @@ private:
 
 	static constexpr float BaseDropItemImpulseModifier = 3.0f;
 	static constexpr float BaseDropItemInitialDistance = 100.0f;
-	
+
+	//A reference to a UDataTable containing all of the FInventoryItemData entries should be added here
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System", meta= (AllowPrivateAccess = true))
 	TObjectPtr<UDataTable> InventoryDataTable;
 
@@ -122,10 +123,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System", meta= (AllowPrivateAccess = true))
 	int InventoryRowSize = BaseRowSize;
 
-	//The distance from the player where the newly dropped item is spawned.
+	//The impulse/force added to the newly dropped item after being spawned.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System", meta= (AllowPrivateAccess = true))
 	float DropItemImpulseModifier = BaseDropItemImpulseModifier;
 
+	//The distance from the player where the newly dropped item is initially spawned.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Inventory System", meta= (AllowPrivateAccess = true))
 	float DropItemInitialDistance = BaseDropItemInitialDistance;
 	

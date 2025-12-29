@@ -119,7 +119,7 @@ Fields
 - **TSoftObjectPtr<UStaticMesh>** Mesh
 - **TSubclassOf<AItemPickupBase>** ItemPickup
 
-## Included Content & Blueprints of Note
+## Included Content & Blueprints
 
 ### BP_Inventory
 A blueprint subclass of **PlayerInventoryBase**, BP_Inventory handles the assignment of Input Actions to various inventory functions. This should be added as a component to the Player Character.
